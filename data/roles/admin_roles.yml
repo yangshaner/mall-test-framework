@@ -1,0 +1,59 @@
+# data/roles/admin_roles.yaml
+
+roles:
+  - id: 1
+    name: "超级管理员"
+    description: "拥有所有权限"
+    permission:
+      - "admin:*"
+      - "product:*"
+      - "order:*"
+      - "user:*"
+      - "coupon:*"
+      - "brand:*"
+      - "category:*"
+      - "flash:*"
+      - "home:*"
+      - "file:*"
+    resources: [1,2,3,4,5,6,7,8,9,10]
+    menus: [1,2,3,4,5,6,7]
+
+  - id: 2
+    name: "商品管理员"
+    description: "管理商品、品牌、分类"
+    permissions:
+      - "product:read"
+      - "product:write"
+      - "product:update"
+      - "brand:read"
+      - "brand:write"
+      - "brand:update"
+      - "category:read"
+      - "category:write"
+      - "category:update"
+    resources: [1, 2, 3]
+    menus: [1, 2]
+
+  - id: 3
+    name: "订单管理员"
+    description: "管理订单"
+    permissions:
+      - "order:read"
+      - "order:write"
+      - "order:update"
+      - "user:read"
+    resources: [4, 5]
+    menus: [3]
+
+  - id: 4
+    name: "只读用户"
+    description: "只能查看数据"
+    permissions:
+      - "product:read"
+      - "order:read"
+      - "user:read"
+      - "brand:read"
+      - "category:read"
+      - "coupon:read"
+    resources: []
+    menus: [1, 3, 5]

@@ -1,0 +1,13 @@
+.idea
+__pycache__/
+*.pyc
+.pytest_cache/
+.allure/
+report/
+reports
+scripts/
+venv/
+*env
+*.log
+
+

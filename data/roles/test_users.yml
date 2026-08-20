@@ -1,0 +1,27 @@
+# data/roles/test_users.yml
+
+admin_users:
+  - id: 1
+    username: "admin"
+    roles: [1]
+    status: 1
+
+  - id: 2
+    username: "product_admin"
+    roles: [2]
+    status: 1
+
+  - id: 3
+    username: "order_admin"
+    roles: [3]
+    status: 1
+
+  - id: 4
+    username: "readonly_user"
+    roles: [4]
+    status: 1
+
+  - id: 5
+    username: "disabled_user"
+    roles: [1]
+    status: 0

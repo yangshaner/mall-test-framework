@@ -2,7 +2,7 @@ pipeline {
 
     agent {
         docker {
-            image 'python:3.12'
+                image 'mall-test-env:1.0'
         }
     }
 
@@ -18,15 +18,6 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                    python --version
-                    pip install --no-cache-dir -r requirements.txt
-
-                '''
-            }
-        }
 
         stage('Health Check') {
             steps {

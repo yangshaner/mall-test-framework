@@ -1,7 +1,6 @@
 # testcases/admin/test_login.py
 import pytest
 import allure
-from numpy.core.fromnumeric import amin
 
 from common.assertions import ApiAssertion
 from common.client.admin_client import AdminClient

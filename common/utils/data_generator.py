@@ -2,10 +2,8 @@
 
 import random
 import string
-import time
 from datetime import datetime, timedelta
-from decimal import Decimal
-from typing import Dict, Any, Optional
+from typing import Dict
 from faker import Faker
 
 

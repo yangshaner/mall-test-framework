@@ -1,10 +1,11 @@
 # common/assertions/redis_assertion.py
 
 import allure
-from typing import Optional, Any, List
+from typing import Any
 
 from .base_assertion import BaseAssertion
 from common.db.redis_util import redis_util
+
 
 class RedisAssertion(BaseAssertion):
     """ Redis断言 """

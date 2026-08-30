@@ -1,6 +1,6 @@
 # api/mmeber/return_api.py
 import allure
-from typing import Optional, Dict, Any, List
+from typing import Dict
 
 from common.client.member_client import MemberClient
 

@@ -1,6 +1,6 @@
 # api/member/order_api.py
 import allure
-from typing import Dict, Optional, List
+from typing import Dict, List
 
 from common.client.member_client import MemberClient
 

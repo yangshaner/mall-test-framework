@@ -1,7 +1,7 @@
 # api/admin/order_api.py
 
 import allure
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, List
 
 from common.client.admin_client import AdminClient
 

@@ -1,6 +1,6 @@
 # api/member/read_history_api.py
 import allure
-from typing import Optional, Dict, List
+from typing import Dict, List
 
 from common.client.member_client import MemberClient
 

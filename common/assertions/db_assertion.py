@@ -1,11 +1,10 @@
 # common/assertion/db_assertion.py
 import  allure
-from typing import Dict, Optional, Any, List, Tuple
-
-from requests import Response
+from typing import Optional, Any, List, Tuple
 
 from .base_assertion import BaseAssertion
 from common.db.mysql_util import mysql
+
 
 class DBAssertion(BaseAssertion):
     """ 数据库断言 """

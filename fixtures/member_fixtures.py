@@ -1,7 +1,6 @@
 # fixtures/member_fixtures.py
 import pytest
 import allure
-from typing import Dict, Any
 
 from api.member import ReturnApi
 from api.member.login_api import MemberLoginApi
@@ -18,7 +17,7 @@ from api.member.brand_api import MemberBrandApi
 from common.assertions import ApiAssertion, DBAssertion
 from common.client.member_client import MemberClient
 from common.utils.data_generator import DataGenerator
-from fixtures.product_fixtures import test_product, test_brand, test_category
+from fixtures.product_fixtures import test_product, test_brand
 
 
 # --------- 客户端 fixtures -----------

@@ -1,7 +1,7 @@
 # api/member/login_api.py
 
 import allure
-from typing import Optional, Dict
+from typing import Dict
 
 from common.client.member_client import MemberClient
 

@@ -2,7 +2,6 @@
 
 import time
 import json
-import logging
 import allure
 import requests
 from typing import Optional,Dict,Any,Union

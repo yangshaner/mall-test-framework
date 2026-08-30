@@ -1,8 +1,7 @@
 # common/assertion/api_assertion.py
 
-import json
 import allure
-from typing import Optional, Dict, Any, List, Union
+from typing import Optional, List
 
 from .base_assertion import BaseAssertion
 

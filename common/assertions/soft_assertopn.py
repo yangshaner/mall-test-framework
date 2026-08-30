@@ -3,7 +3,6 @@ import allure
 from contextlib import contextmanager
 from typing import Any
 
-from .base_assertion import BaseAssertion
 from .api_assertion import ApiAssertion
 from .db_assertion import DBAssertion
 from .redis_assertion import RedisAssertion

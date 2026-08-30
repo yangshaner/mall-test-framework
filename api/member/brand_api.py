@@ -1,6 +1,5 @@
 # api/member/brand_api.py
 import allure
-from typing import Optional, Dict, List, Any
 
 from common.client.member_client import MemberClient
 

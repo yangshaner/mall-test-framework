@@ -3,7 +3,6 @@ import requests
 
 from common.client.base_client import BaseClient
 from common.config.config_loader import config
-from common.client.token_context import token_context
 
 
 class AdminClient(BaseClient):

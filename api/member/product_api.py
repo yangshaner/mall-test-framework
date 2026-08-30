@@ -1,8 +1,7 @@
 # api/member/product_api.py
 import allure
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
-from common.client.member_client import MemberClient
 
 class MemberProductApi:
     """ 前台商品API """

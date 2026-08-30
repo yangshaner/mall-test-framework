@@ -4,11 +4,8 @@ import allure
 import logging
 
 from common.client.admin_client import AdminClient
-from common.utils.data_generator import DataGenerator
 from common.db.mysql_util import mysql
 from common.assertions import DBAssertion
-from common.config.config_loader import config
-from common.assertions import ApiAssertion
 
 logger = logging.getLogger(__name__)
 

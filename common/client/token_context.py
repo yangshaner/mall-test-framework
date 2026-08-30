@@ -2,10 +2,9 @@
 import threading
 import time
 import logging
-from typing import Optional, Dict, Any
+from typing import Optional, Dict
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +40,7 @@ class TokenInfo:
             'user_info': self.user_info,
             'created_at': self.created_at
         }
+
 
 class TokenContext:
     """ Token上下文管理器 - 支持线程隔离 """

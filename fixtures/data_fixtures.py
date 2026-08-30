@@ -1,6 +1,5 @@
 # fixtures/data_fixtures.py
 import pytest
-import allure
 
 from common.utils.data_generator import DataGenerator
 from common.db.mysql_util import mysql

@@ -1,6 +1,6 @@
 # api/admin/category_api.py
 import allure
-from typing import Optional, Any, List, Dict
+from typing import List, Dict
 
 from common.client.admin_client import AdminClient
 

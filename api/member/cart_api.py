@@ -2,8 +2,6 @@
 import allure
 from typing import Dict, List, Optional
 
-from common.client.member_client import MemberClient
-
 
 class CartApi:
     """ 购物车API """

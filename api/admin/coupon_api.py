@@ -1,6 +1,6 @@
 # api/amdin/coupon_api.py
 import allure
-from typing import Optional, List, Dict, Any
+from typing import Optional, Dict
 
 from common.client.admin_client import AdminClient
 

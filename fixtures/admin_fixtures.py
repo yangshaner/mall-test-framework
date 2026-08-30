@@ -2,7 +2,7 @@
 
 import pytest
 import allure
-from typing import Dict, Any
+from typing import Any
 
 from api.admin.product_api import ProductApi
 from api.admin.brand_api import BrandApi

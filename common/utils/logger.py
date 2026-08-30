@@ -4,7 +4,6 @@ import logging
 import sys
 from pathlib import Path
 from logging.handlers import RotatingFileHandler
-import os
 
 # 创建日志目录
 

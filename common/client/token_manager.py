@@ -3,9 +3,8 @@
 import threading
 import time
 import logging
-from typing import Optional, Dict, Any
+from typing import Dict
 
-from common.client.base_client import BaseClient
 from common.config.config_loader import config
 
 logger = logging.getLogger(__name__)
@@ -91,6 +90,7 @@ class TokenManager:
         else:
             self._tokens.clear()
 
+
 class AdminTokenManager(TokenManager):
 
     def __init__(self):
@@ -102,6 +102,7 @@ class AdminTokenManager(TokenManager):
 
     def get_admin_token(self, force_refresh: bool = False) -> str :
         return self.get_token("admin", force_refresh)
+
 
 class MemberTokenManager(TokenManager):
 

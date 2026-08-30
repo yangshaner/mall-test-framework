@@ -3,9 +3,9 @@
 import json
 import logging
 import allure
-from typing import Any, Optional, Dict, List, Union, Callable
+from typing import Any, List, Union
 from functools import wraps
-import pytest
+
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +33,7 @@ def soft_assert(func):
             return None
 
     return wrapper
+
 
 class BaseAssertion:
     """ 断言基类 """

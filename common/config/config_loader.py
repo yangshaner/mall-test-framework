@@ -26,7 +26,7 @@ class ConfigLoader:
     def _load_config(self) -> Dict[str, Any]:
         """ 加载配置 """
         # 配置文件路径
-        config_dir = Path(__file__).parent # ?
+        config_dir = Path(__file__).parent
         config_file = config_dir / 'config.yml'
 
         # 加载配置
@@ -34,7 +34,7 @@ class ConfigLoader:
             config = yaml.safe_load(f)
 
         # 环境选择
-        env = os.getenv('TEST_ENV', 'dev') #?
+        env = os.getenv('TEST_ENV', 'dev') # ?
         env_config = config.get(env, {})
 
         # 合并默认配置
@@ -63,11 +63,13 @@ class ConfigLoader:
         env_mappings = {
             "ADMIN_URL": ('admin', 'base_url'),
             "MEMBER_URL": ('member', 'base_url'),
+
             "DB_HOST": ('database', 'host'),
             "DB_PORT": ('database', 'port'),
             "DB_USER": ('database', 'user'),
             "DB_PASSWORD": ('database', 'password'),
             "DB_NAME": ('database', 'database'),
+
             "REDIS_HOST": ('redis', 'host'),
             "REDIS_PORT": ('redis', 'port'),
             "REDIS_DB": ('redis', 'db'),
@@ -75,6 +77,8 @@ class ConfigLoader:
 
         for env_key, path in env_mappings.items():
             value = os.getenv(env_key)
+            if env_key == 'ADMIN_URL':
+                print("ADMIN URL value:", value)
             if value is not None:
                 # 处理数字类型
                 if path[-1] in ['port', 'db']:
@@ -86,8 +90,8 @@ class ConfigLoader:
     def _set_nested_value(self, config: Dict, path: tuple, value):
         """ 设置嵌套值 """
         current = config
-        for key in path[-1]:
-            if  key not in current:
+        for key in path[:-1]:
+            if key not in current:
                 current[key] = {}
             current = current[key]
         current[path[-1]] = value

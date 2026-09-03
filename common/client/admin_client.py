@@ -8,7 +8,8 @@ from common.config.config_loader import config
 class AdminClient(BaseClient):
 
     def __init__(self, base_url: str = None, username: str = None):
-        base_url = base_url or config.get("admin", {}).get("base_url")
+        # base_url = base_url or config.get("admin", {}).get("base_url")
+        base_url = base_url or config.get("admin.base_url")
         super().__init__(base_url)
 
         self._username = username or  config.get("admin", {}).get("username", "admin")

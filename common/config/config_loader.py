@@ -90,7 +90,7 @@ class ConfigLoader:
     def _set_nested_value(self, config: Dict, path: tuple, value):
         """ 设置嵌套值 """
         current = config
-        for key in path[:-1]:
+        for key in path[:-1]: # 不是[-1],
             if key not in current:
                 current[key] = {}
             current = current[key]

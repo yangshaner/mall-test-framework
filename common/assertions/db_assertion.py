@@ -31,7 +31,7 @@ class DBAssertion(BaseAssertion):
         )
 
     @allure.step("断崖数据不存在")
-    def assert_not_exist(self, table: str, condition: str,
+    def assert_not_exists(self, table: str, condition: str,
                          params: Optional[Tuple] = None,
                          message: str = "数据存在",
                          soft: bool = False):

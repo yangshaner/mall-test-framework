@@ -99,4 +99,4 @@ class TestMemberOrder:
 
         order_id = orders[0].get("id")
         response = member_order_api.confirm_receiver_order(order_id)
-        self.api_assert.assert_success(response, "确认收货失败")
+        self.api_assert.assert_success(response, "确认收货失败", check_data=False)

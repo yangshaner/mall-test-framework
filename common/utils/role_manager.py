@@ -21,6 +21,26 @@ class PermissionType(Enum):
     APPROVE = "approve"
 
 
+def _match_permission(permission: str, permissions:Set[str]) -> bool:
+    """ 检查权限是否匹配，支持 * 通配符 """
+     # 精确匹配
+    if permission in permissions:
+        return True
+
+    # 全局通配符
+    if "*" in permissions:
+        return True
+
+    # resource：* 匹配 resource:any_action
+    if ":" in permission:
+        resource, _ = permission.split(":", 1)
+
+        if f"{resource}:*" in permissions:
+            return True
+
+    return False
+
+
 @dataclass
 class RolePermission:
     """ 角色权限 """
@@ -33,7 +53,7 @@ class RolePermission:
 
     def has_permission(self, permission: str) -> bool:
         """ 检查是否有特定权限 """
-        return permission in self.permissions
+        return _match_permission(permission, self.permissions)
 
     def has_resource(self, resource_id: int) -> bool:
         """ 检查是否有特定资源 """
@@ -60,7 +80,7 @@ class AdminUser:
         return role_id in self.roles
 
     def has_permission(self, permission: str) -> bool:
-        return permission in self.permissions
+        return _match_permission(permission, self.permissions)
 
 
 class RoleManager:
@@ -88,7 +108,7 @@ class RoleManager:
 
     def _load_role_config(self):
         """ 加载角色配置 """
-        config_path = Path(__file__).parent.parent.parent / "data" / "roles" / "admin_role.yaml"
+        config_path = Path(__file__).parent.parent.parent / "data" / "roles" / "admin_roles.yml"
 
         if config_path.exists():
             with open(config_path, "r", encoding='utf-8') as f:
@@ -188,7 +208,7 @@ class RoleManager:
                     role = self._roles.get(role_id)
                     if role:
                         user.permissions.update(role.permissions)
-                    self._users[user.username] = user
+                self._users[user.username] = user
 
     def get_role(self, role_id: int) -> Optional[RolePermission]:
         """ 获取角色权限 """
@@ -236,6 +256,7 @@ class RoleManager:
     def can_access_resource(self, username: str, resource_id: int) -> bool:
         """ 检查用户是否可以访问特定资源 """
         user = self._users.get(username)
+        print("username:", username)
         if user:
             for role_id in user.roles:
                 role = self._roles.get(role_id)

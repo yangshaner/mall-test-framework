@@ -135,6 +135,7 @@ class BaseClient:
         """ 更新当前Session的Authorization头，并更新上下文 """
         if token:
             self.session.headers.update({"Authorization": f"{token_type} {token}"})
+            print("token update")
             # 同时更新上下文（实际Token信息由上下文管理 ？）
             # 但我们不在这里设置过期时间，由调用方或者_login设置
         else:

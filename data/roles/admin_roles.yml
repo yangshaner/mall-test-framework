@@ -4,7 +4,7 @@ roles:
   - id: 1
     name: "超级管理员"
     description: "拥有所有权限"
-    permission:
+    permissions:
       - "admin:*"
       - "product:*"
       - "order:*"

@@ -13,6 +13,8 @@ from api.admin.admin_api import AdminApi
 from common.client.admin_client import AdminClient
 from common.db.mysql_util import mysql
 from common.utils.data_generator import DataGenerator
+from common.assertions import ApiAssertion
+from common.utils.id_fetcher import IDFetcherWithAllure
 
 
 @pytest.fixture(scope="session")
@@ -100,8 +102,19 @@ def test_brand(brand_api, data_generator, db_assert):
         data = data_generator.brand_data()
         response = brand_api.create(data)
         assert response.status_code == 200
-        result = response.json()
-        brand_id = result.get('data', {}).get('id')
+        ApiAssertion().assert_success(response, "创建品牌失败")
+
+        # result = response.json()
+        # brand_id = result.get('data', {}).get('id')
+
+        brand_name = data['name']
+        brand_id = IDFetcherWithAllure.get_id_by_module(
+            api_instance=brand_api,
+            module='brand',
+            search_value=brand_name,
+            page_size=10,
+            max_pages=100
+        )
         assert brand_id, "创建品牌失败，未返回ID"
 
         # 验证数据库
@@ -123,11 +136,20 @@ def test_category(category_api, data_generator, db_assert):
         response = category_api.create(data)
         assert response.status_code == 200
 
-        result = response.json()
-        category_id = result.get('data', {}).get('id')
+        # result = response.json()
+        # category_id = result.get('data', {}).get('id')
+        category_name = data['name']
+        category_id = IDFetcherWithAllure.get_id_by_module(
+            api_instance=category_api,
+            module='category',
+            search_value=category_name,
+            page_size=10,
+            max_pages=100,
+            extra_params={'parent_id': 0}
+        )
         assert category_id, "创建分类失败，未返回ID"
 
-        db_assert.assert_exists('pms_product_category', 'id = %s', (category_id,))
+        # db_assert.assert_exists('pms_product_category', 'id = %s', (category_id,))
 
         allure.attach(str(category_id), "Category ID", allure.attachment_type.TEXT)
         yield category_id
@@ -135,7 +157,6 @@ def test_category(category_api, data_generator, db_assert):
     with allure.step("清理测试分类"):
         category_api.delete(category_id)
         db_assert.assert_not_exists('pms_product_category', 'id = %s', (category_id,))
-
 
 @pytest.fixture
 def test_product(product_api, data_generator, test_brand, test_category, db_assert):

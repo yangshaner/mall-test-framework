@@ -1329,6 +1329,21 @@ bug：
 1.testcases/admin中的test_product.py中的simpleList的查询有点问题，和数据库对不上，不知道是什么原因，用postman也查询不出
 
 
+## 第九版
+
+
+问题:
+
+1. 在`admin/test_permission.py`中的`TestPermission`类中的`test_api_permission_denied`，
+   单独测试这个类的话`readonly user`是可以创建商品的（实际是没有分配有这个权限的）， 在测试`admin/`下所有测试用例的时候又是不可以通过的，
+   打印发现在初始化的`client`的时候实际上是`admin`管理员用户在登录，而不是`readonly user`, 就搞不懂
+
+
+
+
+进度说明：
+1. 初步admin/和member/中的测试用例都跑通了（除了个别因为各种原因跳过的），
+2. 
 
 
 

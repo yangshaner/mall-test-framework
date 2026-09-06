@@ -63,7 +63,7 @@ class TestCategory:
             search_value=category_name,
             page_size=10, # 每页获取最多数据
             max_pages=100, # 最多遍历100页
-            extra_params={'parent_id': 0} # 只查以及分类，加快速度
+            extra_params={'parent_id': 0} # 只查询子分类，加快速度
         )
 
         # category_id = mysql.get_id_by_field('pms_product_category', 'name', category_name)
@@ -87,7 +87,7 @@ class TestCategory:
                                           'id = %s', (category_id,))
         # clear
         category_api.delete(category_id)
-        self.db_assert.assert_not_exist('pms_product_category', 'id = %s', (category_id,))
+        self.db_assert.assert_not_exists('pms_product_category', 'id = %s', (category_id,))
 
     @allure.story("更新分类")
     def test_update_category(self, category_api, data_generator):
@@ -239,4 +239,4 @@ class TestCategory:
         category_api.delete(category_id)
         self.api_assert.assert_success(response, "删除分类失败")
 
-        self.db_assert.assert_not_exist('pms_product_category', 'id = %s', (category_id,))
+        self.db_assert.assert_not_exists('pms_product_category', 'id = %s', (category_id,))

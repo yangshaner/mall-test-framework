@@ -20,7 +20,7 @@ class TestMemberLogin:
         # 验证返回token
         token_data = result.get('data', {})
         self.api_assert.assert_field_exist(token_data, "token", "缺少token")
-        self.api_assert.assert_field_exist(token_data, "tokenHead", "缺少tokenHead")  # ？
+        self.api_assert.assert_field_exist(token_data, "tokenHead", "缺少tokenHead")
 
     @allure.story("会员登录")
     def test_login_wrong_password(self, member_login_api):

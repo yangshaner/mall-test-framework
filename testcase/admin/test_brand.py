@@ -70,7 +70,7 @@ class TestBrand:
                                           'id = %s', (brand_id,))
         # clear
         brand_api.delete(brand_id)
-        self.db_assert.assert_not_exist('pms_brand', 'id = %s', (brand_id,))
+        self.db_assert.assert_not_exists('pms_brand', 'id = %s', (brand_id,))
 
     @allure.story("品牌更新")
     def test_update_brand(self, brand_api, data_generator):
@@ -257,7 +257,7 @@ class TestBrand:
         self.api_assert.assert_success(response, "删除品牌失败", check_data=False) # 没有data字段  或 data 为 null
 
         # 验证不存在
-        self.db_assert.assert_not_exist('pms_brand', 'id = %s', (brand_id,))
+        self.db_assert.assert_not_exists('pms_brand', 'id = %s', (brand_id,))
 
     @allure.story("批量删除品牌")
     def test_delete_batch_delete(self, brand_api, data_generator):
@@ -293,4 +293,4 @@ class TestBrand:
 
         # 验证全部删除
         for brand_id in brand_ids:
-            self.db_assert.assert_not_exist('pms_brand', 'id = %s', (brand_id,))
+            self.db_assert.assert_not_exists('pms_brand', 'id = %s', (brand_id,))

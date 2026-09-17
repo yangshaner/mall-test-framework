@@ -5,6 +5,7 @@ __pycache__/
 .allure/
 report/
 reports
+results/
 scripts/
 venv/
 *env

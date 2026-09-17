@@ -3,7 +3,6 @@ import pytest
 import allure
 
 from common.assertions import ApiAssertion
-from common.db import redis_util
 from common.utils.role_manager import role_manager
 from common.client.admin_client import AdminClient
 
@@ -11,24 +10,19 @@ from common.utils.data_generator import DataGenerator
 
 @allure.feature("后台权限管理")
 class TestAdminPermission:
-    """ 后台权限控制测试 """
 
     def setup_method(self):
         self.api_assert = ApiAssertion()
 
     @allure.story("角色权限配置")
     def test_role_permission_config(self):
-        """ 测试角色权限配置是否正确 """
         roles = role_manager.get_all_roles()
         assert len(roles) > 0, "未配置任何角色"
 
-        # 检查超级管理员权限
         admin_role = role_manager.get_role(1)
         assert admin_role, "超级管理员角色不存在"
         assert "admin:*" in admin_role.permissions, "超级管理员缺少admin:*权限"
-        # assert 'admin:delete' and 'admin:read' and 'admin:update' and 'admin:write' in admin_role.permissions, "超级管理员缺少admin:*权限"
 
-        # 检查只读用户权限
         readonly_role = role_manager.get_role(4)
         assert readonly_role, "只读用户角色不存在"
         assert "product:read" in readonly_role.permissions, "只读用户缺少product:read权限"
@@ -42,8 +36,7 @@ class TestAdminPermission:
             perms = role_manager.get_user_permission(user.username)
             assert perms is not None, f"用户{user.username}无权限"
 
-            # 验证用户权限包含其他角色的权限
-            for role_id in user.roles: # not users.roles
+            for role_id in user.roles:
                 role = role_manager.get_role(role_id)
                 if role:
                     for perm in role.permissions:
@@ -73,19 +66,15 @@ class TestAdminPermission:
     ])
     def test_resource_permission(self, username, resource_id, expected):
         can_access = role_manager.can_access_resource(username, resource_id)
-        # 如果资源未配置，默认为False
         if can_access is None:
             can_access = False
-        assert can_access == expected, f"用户{username}对资源{resource_id}访问应为{expected}" # 资源设置了吗 ？
+        assert can_access == expected, f"用户{username}对资源{resource_id}访问应为{expected}"
 
 
     @pytest.mark.skipif(1==1, reason="readonly user似乎不是实际的client")
     @allure.story("实际接口权限验证")
     def test_api_permission_denied(self):
-        """ 测试无权限用户访问受限接口 """
-        # 使用只读用户登录
         client = AdminClient()
-        # 登录只读用户
         login_response = client.post("/admin/login", json={
             "username": "readonly_user",
             "password": "readonly"
@@ -97,20 +86,9 @@ class TestAdminPermission:
         if login_data.get('code') != 200:
             pytest.skip(f"只读用户登录失败：{login_data.get('message')}")
 
-        # token = login_data.get('data', {}).get('tokenHead', '') + login_data.get('data', {}).get('token', '')
-        token = login_data.get('data', {}).get('token', '')  # 用这个可以设置符合格式的token
+        token = login_data.get('data', {}).get('token', '')
         client.set_token(token)
 
-        print(repr(login_data.get('data', {}).get('tokenHead')))
-        print(repr(login_data.get('data', {}).get('token')))
-        print(repr(token))
-        print("cookies:", client.session.cookies.get_dict())
-        print("headers:", client.session.headers)
-        print("username：", client._username)
-        print("password：", client._password)
-
-
-        # 尝试创建商品（写入操作，只读用户应该没有权限）
         product_data = {
             "name": f"权限测试商品{DataGenerator.random_string(4)}",
             "productSn": "PERM_TEST_001",
@@ -126,12 +104,9 @@ class TestAdminPermission:
         }
         response = client.post("/product/create", json=product_data)
 
-        # 应该返回403或业务错误
         if response.status_code == 200:
             result = response.json()
-            # 业务错误码不应该为200（权限拒绝）
-            print("readonly user create product response:", result)
-            assert result.get('code') != 200, "只读用户不应该有创建商品权限"  # bug之一，readonly_user可以跳过一些步骤直接创建商品
+            assert result.get('code') != 200, "只读用户不应该有创建商品权限"
         else:
             assert response.status_code in [401, 403], f"期望401或403，实际{response.status_code}"
 
@@ -156,7 +131,6 @@ class TestAdminPermission:
             data = result.get('data', {})
             self.api_assert.assert_field_exist(data, "token", "缺少token")
         else:
-            # 应该失败
             if response.status_code == 200:
                 result = response.json()
                 assert result.get('code') != 200, f"用户{username}应登录失败"

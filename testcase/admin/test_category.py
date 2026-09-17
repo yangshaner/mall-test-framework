@@ -51,24 +51,17 @@ class TestCategory:
         response = category_api.create(data)
         self.api_assert.assert_success(response, "创建分类失败")
 
-        # 等待数据同步
         time.sleep(0.5)
-
-        # 获取分类ID（分类接口没有keyword参数，使用模块方式）
-        print(f"新创建的分类名称：{category_name}")
 
         category_id = IDFetcherWithAllure.get_id_by_module(
             api_instance=category_api,
             module='category',
             search_value=category_name,
-            page_size=10, # 每页获取最多数据
-            max_pages=100, # 最多遍历100页
-            extra_params={'parent_id': 0} # 只查询子分类，加快速度
+            page_size=10,
+            max_pages=100,
+            extra_params={'parent_id': 0}
         )
 
-        # category_id = mysql.get_id_by_field('pms_product_category', 'name', category_name)
-
-        # 如果还是找不到，尝试用更宽松的匹配
         if not category_id:
             category_id = IDFetcherWithAllure.get_id_by_module(
                 api_instance=category_api,
@@ -76,22 +69,19 @@ class TestCategory:
                 search_value=category_name,
                 page_size=10,
                 max_pages=100,
-                exact_match=False,  # 改为模糊匹配
+                exact_match=False,
                 extra_params={'parent_id': 0}
             )
 
-        print(f"创建的分类id：{category_id}")
         assert category_id, f"未找到创建的分类：{category_name}"
         self.db_assert.assert_exists('pms_product_category', 'id = %s', (category_id,))
         self.db_assert.assert_field_value('pms_product_category', 'name', data['name'],
                                           'id = %s', (category_id,))
-        # clear
         category_api.delete(category_id)
         self.db_assert.assert_not_exists('pms_product_category', 'id = %s', (category_id,))
 
     @allure.story("更新分类")
     def test_update_category(self, category_api, data_generator):
-        # 先创建分类
         category_name = f"TEST_{data_generator.random_string(4)}"
         data = {
             "parentId": 0,
@@ -104,31 +94,18 @@ class TestCategory:
         response = category_api.create(data)
         self.api_assert.assert_success(response, "创建分类失败")
 
-        """
-        category_id = IDFetcherWithAllure.get_id_by_module(
-            api_instance=category_api,
-            module='category',
-            search_value=category_name,
-            page_size=10,  # 每页获取最多数据
-            max_pages=100,  # 最多遍历100页
-            extra_params={'parent_id': 0}  # 只查以及分类，加快速度
-        )
-        """
         time.sleep(0.5)
         category_id = mysql.get_id_by_field('pms_product_category', 'name', category_name)
         assert category_id, f"未找到创建的分类:{category_name}"
 
         update_data = {
-            # "id": category_id, # id参数要加上 加不加都行
-            "parentId": 0, #这个要加上
+            "parentId": 0,
             "name": f"已更新_{category_name}",
             "sort": 50,
             "showStatus": 1,
             "navStatus": 0
         }
-        print(f"category update id:{category_id}") # id ?
-        print(f"category update name:{category_name}")
-        response = category_api.update(category_id, update_data) # 请求的url错误码 ？
+        response = category_api.update(category_id, update_data)
         self.api_assert.assert_success(response, "更新分类失败")
         self.db_assert.assert_field_value('pms_product_category', 'name', update_data['name'],
                                           'id = %s', (category_id,))
@@ -139,7 +116,6 @@ class TestCategory:
 
     @allure.story("分类详情")
     def test_get_category_detail(self, category_api, data_generator):
-        # 先创建
         category_name = f"测试分类_{data_generator.random_string(4)}"
         data = {
             "parentId": 0,
@@ -168,7 +144,6 @@ class TestCategory:
     @allure.story("显示状态")
     @pytest.mark.parametrize("show_status", [0, 1])
     def test_update_show_status(self, category_api, data_generator, show_status):
-        # 先创建
         category_name = f"测试分类_{data_generator.random_string(4)}"
         data = {
             "parentId": 0,
@@ -184,7 +159,6 @@ class TestCategory:
         category_id = mysql.get_id_by_field('pms_product_category', 'name', category_name)
         assert category_id, f"未找到创建的分类:{category_name}"
 
-        # 修改显示状态
         response = category_api.update_show_status([category_id], show_status)
         self.api_assert.assert_success(response, "修改显示状态失败")
         self.db_assert.assert_field_value('pms_product_category', 'show_status', show_status,
@@ -195,7 +169,6 @@ class TestCategory:
     @allure.story("导航状态")
     @pytest.mark.parametrize("nav_status", [0, 1])
     def test_update_nav_status(self, category_api, data_generator, nav_status):
-        # 先创建
         category_name = f"测试分类_{data_generator.random_string(4)}"
         data = {
             "parentId": 0,

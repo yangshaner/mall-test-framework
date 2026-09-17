@@ -3,7 +3,6 @@ import pytest
 import allure
 import time
 from common.assertions import ApiAssertion, DBAssertion
-from common.db.mysql_util import mysql
 
 
 @allure.feature("订单管理")
@@ -30,7 +29,6 @@ class TestOrder:
         (4, "已关闭")
     ])
     def test_get_order_list_by_status(self, order_api, status, status_name: str):
-        """ 测试按状态过滤订单 """
         status_name = {0: "待付款", 1: "待发货", 2: "已发货", 3: "已完成", 4: "已关闭"}
         response = order_api.list(page_num=1, page_size=10, status=status)
         self.api_assert.assert_success(response, f"按状态{status}查询失败")
@@ -146,7 +144,6 @@ class TestOrder:
 
     @allure.story("批量删除订单")
     def text_batch_delete_orders(self, order_api):
-        # 获取已关闭或已完成的订单
         list_resp = order_api.list(page_num=1, page_size=2, status=4)
         orders = list_resp.json().get("data", {}).get("list", [])
         if len(orders) < 1:

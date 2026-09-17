@@ -1,28 +1,23 @@
 # testcases/admin/test_login.py
-import pytest
 import allure
 
 from common.assertions import ApiAssertion
-from common.client.admin_client import AdminClient
 
 
 @allure.feature("后台登录认证")
 class TestAdminLogin:
-    """ 后台登录、登出、刷新Token等测试 """
 
     def setup_method(self):
         self.api_assert = ApiAssertion()
 
     @allure.story("登录")
     def test_login_success(self, admin_api):
-        """ 测试后台管理员登录成功 """
         response = admin_api.login("admin", "macro123")
         result = self.api_assert.assert_success(response, "管理员登录失败", check_response_code=False, check_data=False)
         data = result.get('data', {})
         self.api_assert.assert_field_exist(data, "token", "缺少token")
         self.api_assert.assert_field_exist(data, "tokenHead", "缺少tokenHead")
 
-        # 验证token格式
         token = data.get('token')
         assert len(token) > 0, "token为空"
         assert data.get('tokenHead') in ['Bearer ', ''], 'tokenHead格式错误'
@@ -30,7 +25,6 @@ class TestAdminLogin:
     @allure.story("登录")
     def test_login_wrong_password(self, admin_api):
         response = admin_api.login("demo", "wrong_password")
-        # 预期失败，可能是401或业务错误
         assert response.status_code in [200, 401]
         if response.status_code == 200:
             result = response.json()
@@ -83,7 +77,6 @@ class TestAdminLogin:
         user_data = result.get('data', {})
         self.api_assert.assert_field_exist(user_data, 'id', "缺少用户ID")
 
-        # clear
         user_id = user_data.get('id')
         if user_id:
             admin_api.delete(user_id)

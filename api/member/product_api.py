@@ -4,10 +4,8 @@ from typing import Dict, Optional
 
 
 class MemberProductApi:
-    """ 前台商品API """
 
     def __init__(self, client):
-        # self.client = MemberClient()
         self.client = client
 
     @allure.step("搜索商品")
@@ -19,7 +17,6 @@ class MemberProductApi:
                page_size: int = 10,
                sort: int = 0
         ) -> Dict:
-        """ 综合搜索、筛选、排序 """
         params = {
             "pageNum": page_num,
             "pageSize": page_size,

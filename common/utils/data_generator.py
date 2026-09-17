@@ -10,11 +10,9 @@ from faker import Faker
 fake = Faker("zh_CN")
 
 class DataGenerator:
-    """ 测试数据生成器 """
 
     @staticmethod
     def random_string(lenght: int = 8) -> str:
-        """ 生成随机字符串 """
         return ''.join(random.choices(string.ascii_letters + string.digits, k=lenght))
 
     @staticmethod
@@ -51,7 +49,6 @@ class DataGenerator:
     def random_choice(items: list):
         return random.choice(items)
 
-    # 业务数据生成
     @staticmethod
     def admin_login_data(username: str = 'admin', password: str = 'macro123') -> Dict:
         return {'username': username, 'password': password}

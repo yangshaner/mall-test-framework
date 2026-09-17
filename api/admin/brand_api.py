@@ -18,7 +18,6 @@ class BrandApi():
         keyword: Optional[str] = None,
         show_status: Optional[int] = None
     ):
-        """ 分页获取商品列表 """
         params = {"pageNum": page_num, page_size: page_size}
         if keyword:
             params["keyword"] = keyword

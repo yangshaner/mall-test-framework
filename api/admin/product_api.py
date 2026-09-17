@@ -42,7 +42,6 @@ class ProductApi:
 
     @allure.step("创建商品")
     def create(self, data: Dict):
-        # return self.client.post('/product/create', data=data) # 这样会报400
         return self.client.post('/product/create', json=data)
 
     @allure.step("更新商品")
@@ -55,7 +54,6 @@ class ProductApi:
 
     @allure.step("模糊查询商品")
     def simple_list(self, keyword: str):
-        """ 根据商品名称或货号模糊查询 """
         return self.client.get('/product/simpleList', params={"keyword": keyword})
 
     @allure.step("批量修改审查状态")

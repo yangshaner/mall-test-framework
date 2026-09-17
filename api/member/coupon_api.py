@@ -6,7 +6,6 @@ from common.client.member_client import MemberClient
 
 
 class MemberCouponApi:
-    """ 会员优惠卷API """
 
     def __init__(self):
         self.client = MemberClient()
@@ -27,7 +26,6 @@ class MemberCouponApi:
 
     @allure.step("领取优惠卷")
     def add(self, coupon_id: int) -> Dict:
-        """ 领取指定优惠卷 """
         return self.client.post(f"/member/coupon/add/{coupon_id}")
 
     @allure.step("获取当前商品相关优惠卷")

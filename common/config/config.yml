@@ -7,25 +7,24 @@ default:
 
 dev:
   admin:
-    # base_url: http://192.168.1.10:8080
-    base_url: http://10.243.85.117:8080
+    base_url: http://dev.mall.com:8080
     username: admin
     password: macro123
 
   member:
-    base_url: http://10.243.85.117:8085
+    base_url: http://dev.mall.com:8085
     username: demo
     password: demo1234
 
   database:
-    host: 10.243.85.117
+    host: dev.mall.com
     port: 3306
     user: root
     password: root
     database: mall
 
   redis:
-    host: 10.243.85.117
+    host: dev.mall.com
     port: 6379
     db: 0
     password: ""
@@ -48,30 +47,14 @@ test:
     password: root
     database: mall_test
 
-#prod:
-#  admin:
-#    base_url: http://prod.mall.com:8080
 
-#  member:
-#   base_url: http://prod.mall.com:8085
-
-#  database:
-#    host: prod.mall.com
-#    port: 3306
-#    user: root
-#    password: ${DB_PASSWORD}
-#   database: mall_prod
-
-# 权限配置
 permission:
-  # 不需要认证接口
   public_apis:
     - /sso/login
     - /sso/regoster
     - /sso/getAuthCode
     - /sso/updatePassword
 
-  # 角色与API映射
   role_api_mapping:
     admin:
       - /admin/**

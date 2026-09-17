@@ -7,7 +7,6 @@ from common.db.mysql_util import mysql
 
 
 class DBAssertion(BaseAssertion):
-    """ 数据库断言 """
 
     def __init__(self):
         super().__init__()
@@ -18,7 +17,6 @@ class DBAssertion(BaseAssertion):
                      params: Optional[Tuple] = None,
                      message: str = "数据不存在",
                      soft: bool = False):
-        """ 断言数据存在 """
         sql = f"SELECT COUNT(*) as cnt FROM {table} WHERE {condition}"
         result = self._mysql.query(sql, params)
         count = result[0].get("cnt", 0) if result else 0
@@ -35,7 +33,6 @@ class DBAssertion(BaseAssertion):
                          params: Optional[Tuple] = None,
                          message: str = "数据存在",
                          soft: bool = False):
-        """ 断言数据不存在 """
         sql = f"SELECT COUNT(*) as cnt FROM {table} WHERE {condition}"
         result = self._mysql.query(sql, params)
         count = result[0].get("cnt", 0) if result else 0
@@ -53,7 +50,6 @@ class DBAssertion(BaseAssertion):
                            params: Optional[Tuple] = None,
                            message: str = f"字段值不匹配",
                            soft: bool = False):
-        """ 断言字段值相等 """
         sql = f"SELECT {field} FROM {table} WHERE {condition}"
         result = self._mysql.query(sql, params)
         if not result:
@@ -70,7 +66,6 @@ class DBAssertion(BaseAssertion):
                              params: Optional[Tuple] = None,
                              message: str = "字段值不在列表中",
                              soft: bool = False):
-        """ 断言字段值在列表中 """
         sql = f"SELECT {field} FROM {table} WHERE {condition}"
         result = self._mysql.query(sql, params)
         if not result:
@@ -85,7 +80,6 @@ class DBAssertion(BaseAssertion):
                      params: Optional[Tuple] = None,
                      message: str = "记录数不匹配",
                      soft: bool = False):
-        """ 断崖记录数 """
         sql = f"SELECT COUNT(*) as cnt FROM {table}"
         if condition:
             sql += f" WHERE {condition}"
@@ -98,7 +92,6 @@ class DBAssertion(BaseAssertion):
                             params: Optional[Tuple] = None,
                             message: str = "查询结果为空",
                             soft: bool = False):
-        """ 断言查询结果不为空 """
         result = self._mysql.query(sql, params)
         return self._assert(bool(result), message, "非空结果", result, soft)
 
@@ -107,7 +100,6 @@ class DBAssertion(BaseAssertion):
                            params: Optional[Tuple] = None,
                            message: str = "查询结果应为空",
                            soft: bool = False):
-        """ 断言查询结果为空 """
         result = self._mysql.query(sql, params)
         return self._assert(not result, message, "空结果", result, soft)
 
@@ -116,7 +108,6 @@ class DBAssertion(BaseAssertion):
                                condition: str, params: Optional[Tuple] = None,
                                message: str = "字段为空",
                                soft: bool = False):
-        """ 断言字段非空 """
         sql = f"SELECT {field} FROM {table} WHERE {condition}"
         result = self._mysql.query(sql, params)
         if not result:
@@ -129,7 +120,6 @@ class DBAssertion(BaseAssertion):
     def assert_field_null(self, table: str, field: str,
                           condition: str, params: Optional[Tuple] = None,
                           message: str = "字段为空", soft: bool = False):
-        """ 断言字段为空 """
         sql = f"SELECT {field} FROM {table} WHERE {condition}"
         result = self._mysql.query(sql, params)
         if not result:

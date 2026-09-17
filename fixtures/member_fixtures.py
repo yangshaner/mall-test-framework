@@ -20,11 +20,8 @@ from common.utils.data_generator import DataGenerator
 from fixtures.product_fixtures import test_product, test_brand
 
 
-# --------- 客户端 fixtures -----------
-
 @pytest.fixture(scope="session")
 def member_client():
-    """ 会员客户端（已认证） """
     client = MemberClient()
     client._login()
     return client
@@ -32,75 +29,61 @@ def member_client():
 
 @pytest.fixture(scope="session")
 def member_client_unauthenticated():
-    """ 未认证的会员客户端 """
     return MemberClient()
 
 
-# -------- API fixtures --------
-
 @pytest.fixture(scope="session")
-def member_login_api(member_client):  # ?
-    """ 会员登录API """
+def member_login_api(member_client):
     return MemberLoginApi()
 
 
 @pytest.fixture(scope="session")
 def member_product_api(member_client):
-    """ 前台商品API """
     return MemberProductApi(member_client)
 
 
 @pytest.fixture(scope="session")
 def member_brand_api(member_client):
-    """ 前台商品API """
     return MemberBrandApi()
 
 
 @pytest.fixture(scope="session")
 def cart_api(member_client):
-    """ 购物车API """
     return CartApi(member_client)
 
 
 @pytest.fixture(scope="session")
 def member_order_api(member_client):
-    """ 前台订单API """
     return MemberOrderApi()
 
 
 @pytest.fixture(scope="session")
 def member_coupon_api(member_client):
-    """ 会员优惠卷API """
     return MemberCouponApi()
 
 
 @pytest.fixture(scope="session")
 def address_api(member_client):
-    """ 收货地址API """
     return AddressApi()
 
 
 @pytest.fixture(scope="session")
 def collection_api(member_client):
-    """ 收藏API """
     return CollectionApi()
 
 
 @pytest.fixture(scope="session")
 def attention_api(member_client):
-    """ 关注API """
     return AttentionApi()
 
 
 @pytest.fixture(scope="session")
 def read_history_api(member_client):
-    """ 浏览记录API """
     return ReadHistoryApi()
 
 
 @pytest.fixture(scope="session")
 def home_api(member_client):
-    """ 首页API """
     return HomeApi()
 
 
@@ -109,31 +92,23 @@ def retune_api(member_client):
     return ReturnApi()
 
 
-# -------- 工具 fixtures --------
-
 @pytest.fixture(scope="session")
 def data_generator():
-    """  数据生成器 """
     return DataGenerator()
 
 
 @pytest.fixture(scope="session")
 def api_assert():
-    """ API 断言工具 """
     return ApiAssertion()
 
 
 @pytest.fixture(scope="session")
 def db_assert():
-    """ 数据库断言工具 """
     return DBAssertion()
 
 
-# -------- 数据 fixtures --------
-
 @pytest.fixture(scope="session")
 def test_member_address(address_api, data_generator, db_assert):
-    """ 创建测试收货地址 """
     with allure.step("创建测试收货地址"):
         data = {
             "name": data_generator.random_name(),
@@ -162,11 +137,7 @@ def test_member_address(address_api, data_generator, db_assert):
 
 @pytest.fixture
 def test_cart_item(cart_api, member_product_api, test_product, data_generator):
-    """ 创建购物车商品 """
     with allure.step("添加商品到购物车"):
-        # 先获取商品详情获取SKU信息
-        # product_api = MemberProductApi()
-        # product_response = product_api.detail(test_product)
         product_response = member_product_api.detail(test_product)
         product_result = product_response.json()
         print(f"product_result: {product_result}")
@@ -182,15 +153,13 @@ def test_cart_item(cart_api, member_product_api, test_product, data_generator):
             "price": price
         }
         response = cart_api.add(data)
-        assert response.status_code == 200, f"添加购物车失败（http层面）： {response.text}"  # response 没有 status_code ?
+        assert response.status_code == 200, f"添加购物车失败（http层面）： {response.text}"
         add_result = response.json()
         assert add_result.get("code") == 200, f"添加购物车失败（业务处理层面）：{add_result.get('message')}"
 
 
-        # 获取购物车列表获取ID （BaseClient会自动处理401重试）
         list_response = cart_api.list()
         assert list_response.status_code == 200
-        # list_data = list_response.json().get("data", [])
         list_result = list_response.json()
         assert list_result.get('code') == 200, f"获取购物车列表失败：{list_result.get('message')}"
 
@@ -215,14 +184,10 @@ def test_cart_item(cart_api, member_product_api, test_product, data_generator):
 
 @pytest.fixture
 def test_member_order(member_order_api, test_cart_item, test_member_address):
-    """ 创建测试订单 """
     with allure.step("生成测试订单"):
-        # 生成确认单
         conforms_response = member_order_api.generate_confirm_order([test_cart_item])
         confirm_result = conforms_response.json()
-        confirm_data = confirm_result.get("data", {})  # ?
 
-        # 生成订单
         order_data = {
             "memberReceiverAddressId": test_member_address,
             "couponId": None,
@@ -248,7 +213,6 @@ def test_member_order(member_order_api, test_cart_item, test_member_address):
 
 @pytest.fixture
 def test_read_history(read_history_api, test_product, data_generator):
-    """ 创建测试浏览记录 """
     with allure.step("创建测试浏览记录"):
         data = {
             "productId": test_product,
@@ -274,7 +238,6 @@ def test_read_history(read_history_api, test_product, data_generator):
 
 @pytest.fixture
 def test_collection(collection_api, test_product, data_generator):
-    """ 创建测试收藏 """
     with allure.step("创建测试收藏"):
         data = {
             "productId": test_product,
@@ -299,7 +262,6 @@ def test_collection(collection_api, test_product, data_generator):
 
 @pytest.fixture
 def test_attention(attention_api, test_brand, data_generator):
-    """ 创建测试关注 """
     with allure.step("创建测试关注"):
         brand_api = MemberBrandApi()
         brand_response = brand_api.detail(test_brand)

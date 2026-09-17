@@ -4,10 +4,8 @@ from typing import Dict, List, Optional
 
 
 class CartApi:
-    """ 购物车API """
 
     def __init__(self, client):
-        # self.client = MemberClient()
         self.client = client
 
     @allure.step("获取购物车列表")

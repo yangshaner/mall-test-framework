@@ -10,7 +10,6 @@ from common.config.config_loader import config
 logger = logging.getLogger(__name__)
 
 class TokenManager:
-    """ token管理器 - 支持多线程和并发 """
 
     _instance = None
     _lock = threading.Lock()
@@ -28,9 +27,9 @@ class TokenManager:
             return
         self._initialized = True
 
-        self._tokens = {} # client_name -> token_info
-        self._locks = {}   # client_name -> Lock
-        self._login_funcs = {} # client_name -> login_function
+        self._tokens = {}
+        self._locks = {}
+        self._login_funcs = {}
 
         self._admin_token = None
         self._admin_token_expire = 0
@@ -40,7 +39,6 @@ class TokenManager:
         self._member_token_expire = 0
         self._member_lock = threading.Lock()
 
-        # 配置文件
         self.admin_config = config.get('admin', {})
         self.member_config = config.get('member', {})
 
@@ -70,14 +68,13 @@ class TokenManager:
         return time.time() >= expire_time - 60
 
     def _login(self, client_name: str) -> Dict:
-        """ 执行登录获取Token """
         login_func = self._login_funcs.get(client_name)
         if not login_func:
             raise ValueError(f"No login function registered for {client_name}")
 
-        result = login_func() # func 哪来的
+        result = login_func()
         token = result.get('token', '')
-        expire_in = result.get('expire_time', 7200) # 7200 是什么
+        expire_in = result.get('expire_time', 7200)
 
         return {
             'token': token,

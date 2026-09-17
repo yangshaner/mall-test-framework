@@ -6,14 +6,12 @@ from common.client.member_client import MemberClient
 
 
 class MemberOrderApi:
-    """ 前台订单API """
 
     def __init__(self):
         self.client = MemberClient()
 
     @allure.step("获取订单列表")
     def list(self, status: int = 1, page_num: int = 1, page_size: int = 10) -> Dict:
-        """ 按状态分页获取用户订单列表 """
         return self.client.get("/order/list", params={
             "status": status,
             "pageNum": page_num,
@@ -26,12 +24,10 @@ class MemberOrderApi:
 
     @allure.step("确认生成订单")
     def generate_confirm_order(self, cart_ids: List[int]) -> Dict:
-        """ 根据购物车信息生生确认单 """
         return self.client.post("/order/generateConfirmOrder", json=cart_ids)
 
     @allure.step("生成订单")
     def generate_order(self, data: Dict) -> Dict:
-        """ 根据购物车信息生成订单 """
         return self.client.post("/order/generateOrder", json=data)
 
     @allure.step("用户取消订单")

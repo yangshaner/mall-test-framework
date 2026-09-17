@@ -6,7 +6,6 @@ from common.client.member_client import MemberClient
 
 
 class AddressApi:
-    """ 会员收货地址API """
 
     def __init__(self):
         self.client = MemberClient()

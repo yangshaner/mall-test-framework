@@ -21,7 +21,6 @@ class OrderApi:
         source_type: Optional[int] = None,
         receiver_keyword: Optional[str] = None
     ):
-        # params = {"page_num": page_num, "page_size": page_size}
         params = {"pageNum": page_num, "pageSize": page_size}
         if order_sn:
             params["orderSn"] = order_sn

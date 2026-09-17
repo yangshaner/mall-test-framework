@@ -6,19 +6,16 @@ from common.client.member_client import MemberClient
 
 
 class HomeApi:
-    """ 首页API """
 
     def __init__(self):
         self.client = MemberClient()
 
     @allure.step("获取首页信息")
     def content(self) -> Dict:
-        """ 首页内容信息展示 """
         return self.client.get("/home/content")
 
     @allure.step("获取推荐商品")
     def recommend_product_list(self, page_num: int = 1, page_size: int = 4) -> Dict:
-        """ 分页获取推荐商品 """
         return self.client.get("/home/recommandProductList", params={
             "pageNum": page_num,
             "pageSize": page_size
@@ -26,7 +23,6 @@ class HomeApi:
 
     @allure.step("获取商品推荐")
     def new_product_list(self, page_num: int = 1, page_size: int = 6) -> Dict:
-        """ 分页获取新品推荐商品 """
         return self.client.get("/home/newProductList", params={
             "pageNum": page_num,
             "pageSize": page_size
@@ -34,7 +30,6 @@ class HomeApi:
 
     @allure.step("获取人气推荐")
     def hot_product_list(self, page_num: int = 1, page_size: int = 6) -> Dict:
-        """ 分页获取人气推荐商品 """
         return self.client.get("/home/hotProductList", params={
             "pageNum": page_num,
             "pageSize": page_size
@@ -42,12 +37,10 @@ class HomeApi:
 
     @allure.step("获取商品分类")
     def product_cate_list(self, parent_id: int) -> Dict:
-        """ 获取首页商品分类 """
         return self.client.get(f"/home/productCateList/{parent_id}")
 
     @allure.step("获取专题列表")
     def subject_list(self, cate_id: Optional[int] = None, page_num: int = 1, page_size: int = 4) -> Dict:
-        """ 根据分类获取专题 """
         params = {"pageNum": page_num, "pageSize": page_size}
         if cate_id:
             params["cateId"] = cate_id

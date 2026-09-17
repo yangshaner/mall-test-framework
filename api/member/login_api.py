@@ -6,7 +6,6 @@ from typing import Dict
 from common.client.member_client import MemberClient
 
 class MemberLoginApi:
-    """ 会员登录注册API """
 
     def __init__(self):
         self.client = MemberClient()

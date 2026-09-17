@@ -11,7 +11,6 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 class PermissionType(Enum):
-    """ 权限类型 """
     READ = "read"
     WRITE = "write"
     DELETE = "delete"
@@ -22,16 +21,12 @@ class PermissionType(Enum):
 
 
 def _match_permission(permission: str, permissions:Set[str]) -> bool:
-    """ 检查权限是否匹配，支持 * 通配符 """
-     # 精确匹配
     if permission in permissions:
         return True
 
-    # 全局通配符
     if "*" in permissions:
         return True
 
-    # resource：* 匹配 resource:any_action
     if ":" in permission:
         resource, _ = permission.split(":", 1)
 
@@ -43,7 +38,6 @@ def _match_permission(permission: str, permissions:Set[str]) -> bool:
 
 @dataclass
 class RolePermission:
-    """ 角色权限 """
     role_id: int
     role_name: str
     permissions: Set[str] = field(default_factory=set)
@@ -52,11 +46,9 @@ class RolePermission:
     description: str = ""
 
     def has_permission(self, permission: str) -> bool:
-        """ 检查是否有特定权限 """
         return _match_permission(permission, self.permissions)
 
     def has_resource(self, resource_id: int) -> bool:
-        """ 检查是否有特定资源 """
         return resource_id in self.resource_ids
 
     def add_permission(self, permission: str):
@@ -69,7 +61,6 @@ class RolePermission:
 
 @dataclass
 class AdminUser:
-    """ 后台管理用户 """
     id: int
     username: str
     roles: List[int] = field(default_factory=list)
@@ -84,7 +75,6 @@ class AdminUser:
 
 
 class RoleManager:
-    """ 角色权限管理器 """
 
     _instance = None
 
@@ -107,7 +97,6 @@ class RoleManager:
         self._load_user_config()
 
     def _load_role_config(self):
-        """ 加载角色配置 """
         config_path = Path(__file__).parent.parent.parent / "data" / "roles" / "admin_roles.yml"
 
         if config_path.exists():
@@ -126,13 +115,10 @@ class RoleManager:
                     role.menu_ids = role_data.get("menus", [])
                     self._roles[role.role_id] = role
 
-        # 如果没有配置文件，使用默认配置
         if not self._roles:
             self._init_default_roles()
 
     def _init_default_roles(self):
-        """ 初始化默认角色 """
-        # 超级管理员
         super_admin = RolePermission(
             role_id=1,
             role_name="超级管理员",
@@ -152,7 +138,6 @@ class RoleManager:
         }
         self._roles[1] = super_admin
 
-        # 商品管理员
         product_admin = RolePermission(
             role_id=2,
             role_name="商品管理员",
@@ -165,7 +150,6 @@ class RoleManager:
         }
         self._roles[2] = product_admin
 
-        # 订单管理员
         order_admin = RolePermission(
             role_id=3,
             role_name="订单管理员",
@@ -177,7 +161,6 @@ class RoleManager:
         }
         self._roles[3] = order_admin
 
-        # 只读用户
         read_only = RolePermission(
             role_id=4,
             role_name="只读用户",
@@ -190,7 +173,6 @@ class RoleManager:
         self._roles[4] = read_only
 
     def _load_user_config(self):
-        """ 加载用户配置 """
         config_path = Path(__file__).parent.parent.parent / "data" / "roles" /"test_users.yml"
 
         if config_path.exists():
@@ -203,7 +185,6 @@ class RoleManager:
                     username=user_data.get("username"),
                     roles=user_data.get("roles", [])
                 )
-                # 继承角色的权限
                 for role_id in user.roles:
                     role = self._roles.get(role_id)
                     if role:
@@ -211,52 +192,43 @@ class RoleManager:
                 self._users[user.username] = user
 
     def get_role(self, role_id: int) -> Optional[RolePermission]:
-        """ 获取角色权限 """
         return self._roles.get(role_id)
 
     def get_user(self, username: str) -> Optional[AdminUser]:
-        """ 获取用户信息 """
         return self._users.get(username)
 
     def get_user_permission(self, username: str) -> Set[str]:
-        """ 获取用户所有权限 """
         user = self._users.get(username)
         if user:
             return user.permissions
         return set()
 
     def get_user_roles(self, username: str) -> List[int]:
-        """ 获取用户列表 """
         user = self._users.get(username)
         if user:
             return user.roles
         return []
 
     def has_permission(self, username: str, permission: str) -> bool:
-        """ 检查用户是否有特定权限 """
         user = self._users.get(username)
         if user:
-            return user.has_permission(permission)  # ？
+            return user.has_permission(permission)
         return False
 
     def has_any_permission(self, username: str, permissions: List[str]) -> bool:
-        """ 检查用户是否存在任意权限 """
         user = self._users.get(username)
         if user:
             return any(p in user.permissions for p in permissions)
         return False
 
     def has_all_permissions(self, username: str, permissions: List[str]) -> bool:
-        """ 检查用户是否有所有权限 """
         user = self._users.get(username)
         if user:
             return all(p in user.permissions for p in permissions)
         return False
 
     def can_access_resource(self, username: str, resource_id: int) -> bool:
-        """ 检查用户是否可以访问特定资源 """
         user = self._users.get(username)
-        print("username:", username)
         if user:
             for role_id in user.roles:
                 role = self._roles.get(role_id)
@@ -265,7 +237,6 @@ class RoleManager:
         return False
 
     def get_users_by_role(self, role_id: int) -> List[str]:
-        """ 获取拥有特定角色的用户列表 """
         result = []
         for username, user in self._users.items():
             if user.has_role(role_id):
@@ -273,7 +244,6 @@ class RoleManager:
         return result
 
     def add_user(self, username: str, roles: List[str], user_id: int = None):
-        """ 添加用户 """
         user = AdminUser(
             id=user_id or len(self._users) + 1,
             username=username,
@@ -287,26 +257,18 @@ class RoleManager:
         logger.info(f"User {username} added with roles {roles}")
 
     def remove_user(self, username: str):
-        """ 删除用户 """
         if username in self._users:
             del self._users[username]
             logger.info(f"User {username} removed")
 
     def add_role(self, role: RolePermission):
-        """ 添加角色 """
         self._roles[role.role_id] = role
         logger.info(f"Role {role.role_id} added")
 
     def get_all_roles(self) -> List[RolePermission]:
-        """ 获取所有角色 """
-        print(f"self._roles.values():{self._roles.values()}")
         return list(self._roles.values())
 
     def get_all_users(self) -> List[AdminUser]:
-        """ 获取所有用户 """
-        print(f"self._users.values():{self._users.values()}")
         return list(self._users.values())
 
-
-# 全局角色管理器
 role_manager = RoleManager()

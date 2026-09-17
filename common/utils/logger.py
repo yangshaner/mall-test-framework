@@ -5,13 +5,11 @@ import sys
 from pathlib import Path
 from logging.handlers import RotatingFileHandler
 
-# 创建日志目录
 
 LOG_DIR = Path(__file__).parent.parent / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
 def get_logger(name: str = None, level: str = "INFO") -> logging.Logger:
-    """ 获取Logger实例 """
     logger = logging.getLogger(name or __name__)
 
     if logger.handlers:
@@ -19,7 +17,6 @@ def get_logger(name: str = None, level: str = "INFO") -> logging.Logger:
 
     logger.setLevel(getattr(logging, level.upper()))
 
-    # 控制台Handler
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.INFO)
     console_format = logging.Formatter(
@@ -29,7 +26,6 @@ def get_logger(name: str = None, level: str = "INFO") -> logging.Logger:
     console_handler.setFormatter(console_format)
     logger.addHandler(console_handler)
 
-    # 文件Handler
     file_handler = RotatingFileHandler(
         LOG_DIR / 'test.log',
         maxBytes=10 * 1024 * 1024, # 10MB
@@ -47,5 +43,4 @@ def get_logger(name: str = None, level: str = "INFO") -> logging.Logger:
     return logger
 
 def set_log_level(level: str):
-    """ 设置日志级别 """
     logging.getLogger().setLevel(getattr(logging, level.upper()))

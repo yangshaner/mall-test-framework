@@ -6,14 +6,12 @@ from common.client.member_client import MemberClient
 
 
 class ReadHistoryApi:
-    """ 会员浏览记录管理API """
 
     def __init__(self):
         self.client = MemberClient()
 
     @allure.step("获取浏览记录")
     def list(self, page_num: int = 1, page_size: int = 5) -> Dict:
-        """ 分页获取浏览记录 """
         return self.client.get("/member/readHistory/list", params={
             "pageNum": page_num,
             "pageSize": page_size

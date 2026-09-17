@@ -3,13 +3,10 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from lib2to3.pgen2.grammar import name
 
 import pytest
 import os
-from pathlib import Path
 
-# 设置环境变量
 os.environ['TEST_ENV'] = os.getenv('TEST_ENV', 'dev')
 
 def run_all_tests():
@@ -37,7 +34,6 @@ def run_smoke_tests():
     return pytest.main(args)
 
 def run_module(module_name: str):
-    """ 运行指定模块 """
     args = [
         f'testcases/admin/{module_name}',
         '-v',
@@ -47,7 +43,6 @@ def run_module(module_name: str):
     return pytest.main(args)
 
 def run_with_allure():
-    """ 运行并生成 Allure 报告 """
     args = [
         'testcases/',
         '--alluredir=reports/allure-results',

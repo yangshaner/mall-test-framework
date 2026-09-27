@@ -1,6 +1,5 @@
 # testcases/member/test_cart.py
 import allure
-
 from common.assertions import ApiAssertion
 
 
@@ -69,7 +68,7 @@ class TestCart:
         assert len(items) == 0, "购物车未清空"
 
     @allure.story("购物车促销信息")
-    def test_cart_promotion(self, cart_api, test_cart_item):
+    def test_cart_promotion(self, cart_api, seed_cart_item):
         response = cart_api.list_promotion()
         result = self.api_assert.assert_success(response, "获取促销信息失败")
 

@@ -126,7 +126,7 @@ class ApiAssertion(BaseAssertion):
         self.assert_true(bool(obj_data), f"{message}: data为空", soft)
 
         if required_fields:
-            self.assert_fields_exist(obj_data, required_fields, f"{message}: 缺少必要字段", soft)
+            self.assert_field_exist(obj_data, required_fields, f"{message}: 缺少必要字段", soft)
 
         if not soft and self.has_soft_errors():
             self.flush_soft_assertions()
@@ -141,7 +141,7 @@ class ApiAssertion(BaseAssertion):
         data = self.assert_success(response, message, soft=soft)
 
         obj_data = data.get('data', {})
-        self.assert_fields_exist(obj_data, [expected_id_field],
+        self.assert_field_exist(obj_data, [expected_id_field],
                                  f"{message}: 缺少ID字段", soft)
         self.assert_is_not_none(obj_data.get(expected_id_field),
                                 f"{message}: ID为空", soft)

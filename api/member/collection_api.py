@@ -13,15 +13,13 @@ class CollectionApi:
     @allure.step("获取商品收藏列表")
     def list(self, page_num: int = 1, page_size: int = 5) -> Dict:
         return self.client.get("/member/productCollection/list", params={
-            "page_num": page_num,
-            "page_size": page_size
+            "pageNum": page_num,
+            "pageSize": page_size
         })
 
     @allure.step("获取商品收藏详情")
     def detail(self, product_id: int) -> Dict:
-        return self.client.get("/member/product/detail", params={
-            "productId": product_id
-        })
+        return self.client.get("/member/productCollection/detail/{product_id}")
 
     @allure.step("添加商品收藏")
     def add(self, data: Dict) -> Dict:

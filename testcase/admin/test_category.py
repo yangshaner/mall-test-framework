@@ -32,7 +32,7 @@ class TestCategory:
     @allure.story("分类列表")
     def test_get_category_list(self, category_api):
         response = category_api.list(parent_id=0, page_num=1, page_size=10)
-        result = self.api_assert.assert_success(response, "获取分页列表失败") # 没有data字段
+        result = self.api_assert.assert_success(response, "获取分页列表失败")
         data = result.get('data', [])
         self.api_assert.assert_field_exist(data, 'list', "缺少list")
         self.api_assert.assert_field_exist(data, 'total', "缺少total")
@@ -44,7 +44,7 @@ class TestCategory:
             "parentId": 0,
             "name": category_name,
             "productUnit": "件",
-            "sort": 0,
+            "sort": 9999,
             "showStatus": 1,
             "navStatus": 0
         }
@@ -87,7 +87,7 @@ class TestCategory:
             "parentId": 0,
             "name": category_name,
             "productUnit": "件",
-            "sort": 0,
+            "sort": 9999,
             "showStatus": 1,
             "navStatus": 0
         }
@@ -149,7 +149,7 @@ class TestCategory:
             "parentId": 0,
             "name": category_name,
             "productUnit": "件",
-            "sort": 0,
+            "sort": 9999,
             "showStatus": 1,
             "navStatus": 0
         }
@@ -174,7 +174,7 @@ class TestCategory:
             "parentId": 0,
             "name": category_name,
             "productUnit": "件",
-            "sort": 0,
+            "sort": 9999,
             "showStatus": 1,
             "navStatus": 0
         }
@@ -198,7 +198,7 @@ class TestCategory:
             "parentId": 0,
             "name": category_name,
             "productUnit": "件",
-            "sort": 0,
+            "sort": 9999,
             "showStatus": 1,
             "navStatus": 0
         }

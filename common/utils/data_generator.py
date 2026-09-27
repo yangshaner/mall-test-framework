@@ -82,7 +82,7 @@ class DataGenerator:
             'parentId': parent_id,
             'name': name,
             'productUnit': '件',
-            'sort': DataGenerator.random_int(0, 100),
+            'sort': 9999,
             'showStatus': random.choice([0, 1]),
             'navStatus': random.choice([0, 1])
         }
@@ -90,10 +90,12 @@ class DataGenerator:
     @staticmethod
     def product_data(brand_id: int, category_id: int) -> Dict:
         name = f"测试商品_{DataGenerator.random_string(6)}"
+        price = DataGenerator.random_price()
         return {
             'name': name,
             'productSn': f"TEST_{DataGenerator.random_string(8).upper()}",
-            'price': DataGenerator.random_price(),
+            #'price': DataGenerator.random_price(),
+            'price': price,
             'stock': DataGenerator.random_int(1, 100),
             'brandId': brand_id,
             'productCategoryId': category_id,
@@ -101,7 +103,19 @@ class DataGenerator:
             'subTitle': f'测试副标题{DataGenerator.random_string(4)}',
             'publishStatus': 1,
             'verifyStatus': 1,
-            'sort': DataGenerator.random_int(0, 100)
+            # 新建商品需显示置为未删除，mall 后台商品列表默认按 delete_status=0 过滤，
+            # 不传入该字段入库为 NULL，会导致列表 /keyword 搜索查不到本商品
+            'deleteStatus': 0,
+            'sort': DataGenerator.random_int(0, 100),
+            # 商品必须携带SKU：购物车/订单依赖 pms_sku_stock 记录，不传则 SKU 表为空
+            'skuStockList': [{
+                'skuCode': f"SKU_{DataGenerator.random_string(8).upper()}",
+                'price': price,
+                'stock': 100,
+                'lowStock': 0,
+                'sale': 0,
+                'spData': ''
+            }]
         }
 
     @staticmethod

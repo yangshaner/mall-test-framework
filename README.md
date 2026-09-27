@@ -128,3 +128,5 @@ pytest -m "not slow"
 ### 5. CI/CD(Jenkins)
 
 项目内置 [Jenkinsfile](Jenkinsfile),流水线阶段:Checkout → Health Check → API Test → Allure 报告。
+
+(Jenkinsfile 包含：每日定时回归，push 触发)  

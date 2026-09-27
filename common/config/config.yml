@@ -7,24 +7,24 @@ default:
 
 dev:
   admin:
-    base_url: http://dev.mall.com:8080
+    base_url: http://10.243.85.117:8080
     username: admin
     password: macro123
 
   member:
-    base_url: http://dev.mall.com:8085
+    base_url: http://10.243.85.117:8085
     username: demo
     password: demo1234
 
   database:
-    host: dev.mall.com
+    host: 10.243.85.117
     port: 3306
     user: root
     password: root
     database: mall
 
   redis:
-    host: dev.mall.com
+    host: 10.243.85.117
     port: 6379
     db: 0
     password: ""

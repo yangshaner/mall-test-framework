@@ -187,7 +187,7 @@ class IdFetcher:
                     logger.debug(f"已遍历完所有数据，共{total}条")
                     break
 
-                if len(item) < page_size:
+                if len(items) < page_size:
                     print("这已是最后一页")
                     break
 
@@ -443,7 +443,7 @@ class IdFetcher:
                 name_field=name_field,
                 id_field=id_field,
                 page_size=kwargs.get('page_size',  10),
-                extra_match=kwargs.get('extra_params', True),
+                extra_match=kwargs.get('extra_match', True),
                 max_pages=kwargs.get('max_pages', 100),
                 extra_params=extra_params
             )

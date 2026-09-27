@@ -3,15 +3,17 @@ import requests
 
 from common.client.base_client import BaseClient
 from common.config.config_loader import config
+from common.client.token_context import token_context
 
 
 class AdminClient(BaseClient):
 
     def __init__(self, base_url: str = None, username: str = None):
         base_url = base_url or config.get("admin.base_url")
-        super().__init__(base_url)
+        username = username or config.get("admin", {}).get("username", "admin")
+        super().__init__(base_url, client_type=f"admin:{username}")
 
-        self._username = username or  config.get("admin", {}).get("username", "admin")
+        self._username = username
         self._password = config.get("admin", {}).get("password", "123456")
 
     def old_login(self) -> dict:
@@ -58,6 +60,13 @@ class AdminClient(BaseClient):
         token_data = data.get("data", {})
         token = token_data.get('token', '')
         self.set_token(token)
+        token_context.set_token(
+            token,
+            client_type=self.client_type,
+            expire_in=7200,
+            user_info={'username': self._username}
+        )
+
         return {'token': token, 'expire_in': 7200}
 
     def login_with_user(self, username: str, password: str = None):

@@ -48,8 +48,8 @@ class TestMemberOrder:
         self.api_assert.assert_field_exist(data, "status", "缺少订单状态")
 
     @allure.story("生成确认单")
-    def test_generate_confirm_order(self, member_order_api, test_cart_item):
-        response = member_order_api.generate_confirm_order([test_cart_item])
+    def test_generate_confirm_order(self, member_order_api, seed_cart_item):
+        response = member_order_api.generate_confirm_order([seed_cart_item])
         result = self.api_assert.assert_success(response, "生成确认单失败")
 
         data = result.get("data", {})

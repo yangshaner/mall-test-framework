@@ -146,9 +146,19 @@ def test_product(product_api, data_generator, test_brand, test_category, db_asse
         data = data_generator.product_data(test_brand, test_category)
         response = product_api.create(data)
         assert response.status_code == 200
-        result = response.json()
-        product_id = result.get('data', {}).get('id')
-        assert product_id, "创建商品失败，未返回ID"
+
+        ApiAssertion().assert_success(response, "创建商品失败")
+
+        product_name = data['name']
+        product_id = IDFetcherWithAllure.get_id_by_module(
+            api_instance=product_api,
+            module='product',
+            search_value=product_name,
+            list_method_name='list',
+            page_size=10,
+            max_pages=100
+        )
+        assert product_id, f"创建商品失败，未查询到商品ID: {product_name}"
 
         db_assert.assert_exists('pms_product', 'id = %s', (product_id,))
 

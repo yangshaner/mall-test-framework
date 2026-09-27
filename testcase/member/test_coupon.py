@@ -15,19 +15,17 @@ class TestMemberCoupon:
     @pytest.mark.parametrize("use_status", [0, 1, 2])
     def test_coupon_list_by_status(self, member_coupon_api, use_status):
         response = member_coupon_api.list(use_status=use_status)
-        self.api_assert.assert_page_response(
+        self.api_assert.assert_list_response(
             response,
-            message=f"获取优惠券列表失败(useStatus={use_status})",
-            allow_empty_list=True
+            message=f"获取优惠券列表失败(useStatus={use_status})"
         )
 
     @allure.story("优惠券历史列表")
     def test_coupon_history_list(self, member_coupon_api):
         response = member_coupon_api.list_history()
-        self.api_assert.assert_page_response(
+        self.api_assert.assert_list_response(
             response,
-            message="获取优惠券历史列表失败",
-            allow_empty_list=True
+            message="获取优惠券历史列表失败"
         )
 
     @allure.story("商品相关优惠券")

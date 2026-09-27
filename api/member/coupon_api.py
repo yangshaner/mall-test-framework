@@ -22,7 +22,7 @@ class MemberCouponApi:
         params = {}
         if use_status is not None:
             params["useStatus"] = use_status
-        return self.client.get("/member/coupon/listhHistory", params=params)
+        return self.client.get("/member/coupon/listHistory", params=params)
 
     @allure.step("领取优惠卷")
     def add(self, coupon_id: int) -> Dict:
@@ -34,5 +34,4 @@ class MemberCouponApi:
 
     @allure.step("获取购物车的相关优惠卷")
     def list_cart(self, type: int) -> Dict:
-        """ 获取登录会员购物车的相关优惠卷 """
         return self.client.get(f"/member/coupon/list/cart/{type}")
